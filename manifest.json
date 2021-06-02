@@ -1,19 +1,39 @@
 {
 
   "manifest_version": 2,
-  "name": "Borderify",
+  "name": "TL Password Generator",
   "version": "1.0",
-
-  "description": "Adds a red border to all webpages matching mozilla.org.",
+  "default_locale": "en",
+  "description": "Generate the password",
 
   "icons": {
-    "48": "icons/border-48.png"
+    "16": "images/password-16.png",
+    "32": "images/password-32.png",
+    "48": "images/password-48.png",
+    "64": "images/password-64.png"
   },
-
+  "browser_action": {
+    "browser_style": true,
+    "default_icon": {
+        "16": "images/password-16.png",
+        "32": "images/password-32.png",
+        "48": "images/password-48.png",
+        "64": "images/password-64.png"
+    },
+    "default_title": "TL Password Generator",
+    "default_popup": "popup.html"
+    },
+  "permissions": [
+    "storage"
+      ],
   "content_scripts": [
     {
-      "matches": ["*://*.mozilla.org/*"],
-      "js": ["borderify.js"]
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file://*/*"
+      ],
+      "js": ["content.js"]
     }
   ]
 
