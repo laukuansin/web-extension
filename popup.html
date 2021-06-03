@@ -15,51 +15,51 @@
         <hr class="line">
         <div class="group">
             <label for="length" style="margin: 5px 0px;"><b loc="length">Password length</b></label>
-            <input id="length" type="number" min="6" value="10"/>
+            <input id="length" type="number" min="6" value="8" name="length"/>
             <label><span loc="hint">Reccommended password length:</span> <b>16-32</b></label>
             <label><span loc="hint">Minimum password length:</span> <b>6</b></label>
         </div>
         <div class="group">
             <label class="checkbox control">
-                <input id="numbers" type="checkbox" checked="checked"/>
+                <input id="numbers" type="checkbox" checked="checked" name="numbers"/>
                 <span class="mark"></span>
                 <span loc="numbers">Numbers: </span><span class="exp">1234567890</span>
             </label>
             <label class="checkbox control">
-                <input id="lowercase" type="checkbox" checked="checked"/>
+                <input id="lowercase" type="checkbox" checked="checked" name="lowercase"/>
                 <span class="mark"></span>
                 <span loc="lowercase">Lowercase characters: </span><span class="exp">abcdefghijklmnopqrstuvwxyz</span>
             </label>
             <label class="checkbox control">
-                <input id="uppercase" type="checkbox" checked="checked"/>
+                <input id="uppercase" type="checkbox" name="uppercase" checked="checked"/>
                 <span class="mark"></span>
                 <span loc="uppercase">Uppercase characters: </span><span class="exp">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
             </label>
             <label class="checkbox control">
-                <input id="symbols" type="checkbox"/>
+                <input id="symbols" type="checkbox" name="symbols"/>
                 <span class="mark"></span>
                 <span loc="symbols">Symbols: </span><span class="exp">@#$%^&*()+-=!_</span>
             </label>
             <label class="checkbox control">
-                <input id="specialChars" type="checkbox" />
+                <input id="specialChars" type="checkbox" name="specialChars"/>
                 <span class="mark"></span>
                 <span loc="specialChars">Other special characters: <span class="exp">~`{}[]\:;"'&lt;&gt;,.?/</span>
             </label>
             <label class="checkbox control">
-                <input id="dontRepeatChars" type="checkbox" />
+                <input id="noRepeat" type="checkbox" name="noRepeat"/>
                 <span class="mark"></span>
-                <span><span loc="dontRepeatChars">Do not repeat characters</span>
+                <span><span loc="noRepeat">Do not repeat characters</span>
             </label>
             <label class="checkbox control">
-                <input id="excludeChars" type="checkbox" />
+                <input id="excludeChars" type="checkbox" name="excludeChars"/>
                 <span class="mark"></span>
                 <span loc="excludeChars">Exclude</span>
-                <input id="exclude" class="form-control" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
+                <input id="excludeInput" class="form-control" name="excludeInput" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
             </label>
         </div>
         <div>
             <div class="password">
-                <input id="passwordInput" class="passwordInput" type="text"/>
+                <input id="passwordInput" class="passwordInput" type="text" name="passwordInput"/>
                 <img src="images/hide.png" id="visible" class="viewPassword" alt="icon">
                 <button class="copy" id="copy">Copy</button>
             </div>

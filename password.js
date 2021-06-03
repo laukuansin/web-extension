@@ -1,29 +1,46 @@
 var defaultOptions = {
-    upper_case: true,
-    lower_case: true,
+    uppercase: true,
+    lowercase: true,
     numbers: true,
     symbols: false,
-    repeat: false,
-    other: false,
-    exclude: false,
+    noRepeat: false,
+    specialChars: false,
+    excludeChars: false,
+    excludeInput: '',
     length: 10,
   };
 var copy = document.getElementById('copy');
 var visible= document.getElementById('visible');
 var passwordInput = document.getElementById("passwordInput");
-var upperCase=document.getElementById("uppercase");
-var lowerCase=document.getElementById("lowercase");
+var uppercase=document.getElementById("uppercase");
+var lowercase=document.getElementById("lowercase");
 var numbers=document.getElementById("numbers");
 var symbols=document.getElementById("symbols");
-var noRepeat=document.getElementById("dontRepeatChars");
+var noRepeat=document.getElementById("noRepeat");
 var specialChars=document.getElementById("specialChars");
 var excludeChars=document.getElementById("excludeChars");
 var generate=document.getElementById("generate");
 var remind=document.getElementById("reminder");
-var excludeInput=document.getElementById("exclude");
+var excludeInput=document.getElementById("excludeInput");
 
 document.getElementById("version_name").innerHTML=browser.runtime.getManifest().version;
-
+function optionsToForm(options)
+{
+  Object.keys(options).forEach((name) => {
+    var el = document.getElementById(name);
+    if (!el) return;
+    switch (typeof(options[name]))
+    {
+      case 'boolean':
+        el.checked = options[name];
+        break;
+      case 'string':
+      case 'number':
+        el.value = options[name];
+        break;
+    }
+  });
+}
 function copyToClipboard(text) {
   passwordInput.select();
   document.execCommand("copy");
@@ -43,7 +60,7 @@ function toggle()
   }
 }
 function validateOptions() {
-  var inputIsInvalid = !upperCase.checked && !lowerCase.checked && !numbers.checked && !symbols.checked && !specialChars.checked;
+  var inputIsInvalid = !uppercase.checked && !lowercase.checked && !numbers.checked && !symbols.checked && !specialChars.checked;
 
   generate.disabled = inputIsInvalid;
   remind.disabled = inputIsInvalid;
@@ -55,6 +72,7 @@ function validateOptions() {
         remind.disabled = true;
       }
   }
+
 }
 
 function generatePassword(){
@@ -72,22 +90,22 @@ function generatePassword(){
   }
   for (;;) {
     options = {
-      lower: document.getElementById('lowercase').checked,
-      upper: document.getElementById('uppercase').checked,
+      lowercase: document.getElementById('lowercase').checked,
+      uppercase: document.getElementById('uppercase').checked,
       numbers: document.getElementById('numbers').checked,
       symbols: document.getElementById('symbols').checked,
       specialChar: document.getElementById('specialChars').checked,
-      nonRepeat: document.getElementById('dontRepeatChars').checked,
+      noRepeat: document.getElementById('noRepeat').checked,
       excludeChars: document.getElementById('excludeChars').checked,
-      excludeVal: document.getElementById('exclude').value,
+      excludeInput: document.getElementById('excludeInput').value,
       length: length,
     };
-    excludePool = options.excludeVal;
+    excludePool = options.excludeInput;
 
     charPool = '';
-    if (options.lower)
+    if (options.lowercase)
       charPool += lowerPool;
-    if (options.upper)
+    if (options.uppercase)
       charPool += upperPool;
     if (options.numbers)
       charPool += numberPool;
@@ -104,34 +122,54 @@ function generatePassword(){
     if (charPool)
       break;
   }
-  if(options.nonRepeat)
+  if(options.noRepeat)
   {
     if(charPool.length<length)
     {
       alert("With your current setting, the password length should not exceed "+charPool.length+" characters");
     }
   }
-  
-  let password = [], rands = [], rand = 0;
-  for (let index = 0; index < length; index++) {
+  do
+  {
+    var password = "";
 
-      // too prevent the charac repeat
-      do {
-          rand = Math.floor(Math.random() * charPool.length);
-      } while (rands.includes(rand) && rands.length < charPool.length);
-
-      rands.push(rand);
-      password.push(charPool[rand]);
+    for (i = 0; i < length; i++)
+    {
+      password += charPool[GetRandomInt(0, charPool.length)];	// Picking random characters
+      if (options.noRepeat)
+        charPool = charPool.replace(password[i], "");
+    }
   }
-  var result=password.join('');
-  passwordInput.value=result;
+  while (!((!options.uppercase || ContainsAny(password, upperPool)) &&
+      (!options.lowercase || ContainsAny(password, lowerPool)) &&
+      (!options.numbers || ContainsAny(password, numberPool)) &&
+      (!options.specialChars || ContainsAny(password, specialCharPool)) &&
+      (!options.symbols || ContainsAny(password, symbolPool))));
+
+  passwordInput.value=password;
+  browser.storage.local.set(options);
+
+}
+
+function GetRandomInt(min, max)
+{
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function ContainsAny(array1, array2)
+{
+	for(var k = 0; k < array2.length; k++)
+		if (array1.includes(array2[k]))
+			return true;
+
+	return false;
 }
 
 visible.addEventListener('click',toggle);
 copy.addEventListener('click', copyToClipboard);
 
-upperCase.addEventListener('click', validateOptions);
-lowerCase.addEventListener('click', validateOptions);
+uppercase.addEventListener('click', validateOptions);
+lowercase.addEventListener('click', validateOptions);
 numbers.addEventListener('click', validateOptions);
 symbols.addEventListener('click', validateOptions);
 noRepeat.addEventListener('click', validateOptions);
@@ -144,4 +182,7 @@ excludeInput.addEventListener('input', () => {
 });
 
 generate.addEventListener("click",generatePassword);
-
+browser.storage.local.get(Object.keys(defaultOptions)).then((userOptions) => {
+  optionsToForm(Object.assign({}, defaultOptions, userOptions));
+  document.body.style = '';
+});
