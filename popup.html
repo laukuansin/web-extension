@@ -21,29 +21,29 @@
         </div>
         <div class="group">
             <label class="checkbox control">
-                <input id="includeSymbols" type="checkbox" />
+                <input id="numbers" type="checkbox" checked="checked"/>
                 <span class="mark"></span>
-                <span loc="includeSymbols">Symbols: </span><span>@#$%^&*()+-=!_</span>
+                <span loc="numbers">Numbers: </span><span class="exp">1234567890</span>
             </label>
             <label class="checkbox control">
-                <input id="includeNumbers" type="checkbox" />
+                <input id="lowercase" type="checkbox" checked="checked"/>
                 <span class="mark"></span>
-                <span loc="includeNumbers">Numbers: </span><span>1234567890</span>
+                <span loc="lowercase">Lowercase characters: </span><span class="exp">abcdefghijklmnopqrstuvwxyz</span>
             </label>
             <label class="checkbox control">
-                <input id="includeLowercase" type="checkbox" />
+                <input id="uppercase" type="checkbox" checked="checked"/>
                 <span class="mark"></span>
-                <span loc="includeLowercase">Lowercase characters: </span>abcdefghijklmnopqrstuvwxyz</span>
+                <span loc="uppercase">Uppercase characters: </span><span class="exp">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
             </label>
             <label class="checkbox control">
-                <input id="includeUppercase" type="checkbox" />
+                <input id="symbols" type="checkbox"/>
                 <span class="mark"></span>
-                <span loc="includeUppercase">Uppercase characters: </span><span>ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+                <span loc="symbols">Symbols: </span><span class="exp">@#$%^&*()+-=!_</span>
             </label>
             <label class="checkbox control">
-                <input id="otherSpecialChars" type="checkbox" />
+                <input id="specialChars" type="checkbox" />
                 <span class="mark"></span>
-                <span loc="otherSpecialChars">Other special characters: <span>~`{}[]\:;"'&lt;&gt;,.?/</span>
+                <span loc="specialChars">Other special characters: <span class="exp">~`{}[]\:;"'&lt;&gt;,.?/</span>
             </label>
             <label class="checkbox control">
                 <input id="dontRepeatChars" type="checkbox" />
@@ -54,20 +54,19 @@
                 <input id="excludeChars" type="checkbox" />
                 <span class="mark"></span>
                 <span loc="excludeChars">Exclude</span>
-                <input id="exclue" class="form-control" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
+                <input id="exclude" class="form-control" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
             </label>
         </div>
         <div>
-            <label class="password">
+            <div class="password">
                 <input id="passwordInput" class="passwordInput" type="text"/>
-                <img src="images/hide.png" class="viewPassword" alt="icon">
-                <button class="copy">Copy</button>
-            </label>
-            <button class="generate">Generate Password</button>
-            <button class="reminder">Reminder</button>
+                <img src="images/hide.png" id="visible" class="viewPassword" alt="icon">
+                <button class="copy" id="copy">Copy</button>
+            </div>
+            <button class="generate" id="generate">Generate Password</button>
+            <button class="reminder" id="reminder">Reminder</button>
         </div>
-
-        <script type="module" src="password.js"></script>
+        <script src="password.js"></script>
     </body>
 
 </html>
