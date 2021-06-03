@@ -1,147 +1,143 @@
-var defaultOptions = {
-    upper_case: true,
-    lower_case: true,
-    numbers: true,
-    symbols: false,
-    repeat: false,
-    other: false,
-    exclude: false,
-    length: 10,
-  };
-var copy = document.getElementById('copy');
-var visible= document.getElementById('visible');
-var passwordInput = document.getElementById("passwordInput");
-var upperCase=document.getElementById("uppercase");
-var lowerCase=document.getElementById("lowercase");
-var numbers=document.getElementById("numbers");
-var symbols=document.getElementById("symbols");
-var noRepeat=document.getElementById("dontRepeatChars");
-var specialChars=document.getElementById("specialChars");
-var excludeChars=document.getElementById("excludeChars");
-var generate=document.getElementById("generate");
-var remind=document.getElementById("reminder");
-var excludeInput=document.getElementById("exclude");
+const DEFAULT_OPTIONS = {
+    '#cbNumbers': true,
+    '#cbLowerCase': true,
+    '#cbUpperCase': true,
+    '#cbSymbols': false,
+    '#cbSpecialChars': false
+};
 
-document.getElementById("version_name").innerHTML=browser.runtime.getManifest().version;
+const DEFAULT_PASS_LEN = 10;
+const DEFAULT_MIN_LEN = 6;
 
-function copyToClipboard(text) {
-  passwordInput.select();
-  document.execCommand("copy");
-}
-function toggle()
-{
-  if(passwordInput.type=="password")
-  {
-    passwordInput.type="text";
-    visible.src = 'images/hide.png';
 
-  }
-  else{
-    passwordInput.type="password";
-    visible.src = 'images/show.png';
+$(document).ready(function() {
+    var btnGenerate = $('#btnGenerate');
+    var btnRemind = $('#btnRemind');
 
-  }
-}
-function validateOptions() {
-  var inputIsInvalid = !upperCase.checked && !lowerCase.checked && !numbers.checked && !symbols.checked && !specialChars.checked;
+    $("#versionName").text(browser.runtime.getManifest().version);
 
-  generate.disabled = inputIsInvalid;
-  remind.disabled = inputIsInvalid;
-  if(inputIsInvalid)
-  {
-      if(noRepeat||excludeChars)
-      {
-        generate.disabled = true;
-        remind.disabled = true;
-      }
-  }
-}
+    function toggleImgVisible() {
+        let passwordInput = $("#passwordInput");
+        let imgVisible = $('#imgVisible');
 
-function generatePassword(){
-  var options;
-  var lowerPool = 'abcdefghijklmnopqrstuvwxyz';
-  var upperPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  var numberPool = '0123456789';
-  var symbolPool = '@#$%^&*()+-=!_';
-  var specialCharPool = '~`{}[]|\\\"\':;?/><.,'
-  var length=Number(document.getElementById('length').value);
-  if(length<6)
-  {
-    alert("The minimum password length is 6");
-    return;
-  }
-  for (;;) {
-    options = {
-      lower: document.getElementById('lowercase').checked,
-      upper: document.getElementById('uppercase').checked,
-      numbers: document.getElementById('numbers').checked,
-      symbols: document.getElementById('symbols').checked,
-      specialChar: document.getElementById('specialChars').checked,
-      nonRepeat: document.getElementById('dontRepeatChars').checked,
-      excludeChars: document.getElementById('excludeChars').checked,
-      excludeVal: document.getElementById('exclude').value,
-      length: length,
-    };
-    excludePool = options.excludeVal;
-
-    charPool = '';
-    if (options.lower)
-      charPool += lowerPool;
-    if (options.upper)
-      charPool += upperPool;
-    if (options.numbers)
-      charPool += numberPool;
-    if (options.specialChar)
-      charPool += specialCharPool;
-    if (options.symbols)
-      charPool += symbolPool;
-    if (options.excludeChars)
-    {
-      var removeReg=new RegExp(excludePool,'g')
-      charPool = charPool.replace(removeReg, "");
+        if (passwordInput.prop('type') === "password") {
+            passwordInput.prop('type', "text");
+            imgVisible.attr('src', 'images/hide.png');
+        } else {
+            passwordInput.prop('type', "password");
+            imgVisible.attr('src', 'images/show.png');
+        }
     }
-    
-    if (charPool)
-      break;
-  }
-  if(options.nonRepeat)
-  {
-    if(charPool.length<length)
-    {
-      alert("With your current setting, the password length should not exceed "+charPool.length+" characters");
+
+    function isCheckboxChecked() {
+        let cbs = Object.values($('#cbGroup :input[type=checkbox]'));
+        return cbs.reduce(function(result, cb) {
+            return result |= cb.checked;
+        }, false);
     }
-  }
-  
-  let password = [], rands = [], rand = 0;
-  for (let index = 0; index < length; index++) {
 
-      // too prevent the charac repeat
-      do {
-          rand = Math.floor(Math.random() * charPool.length);
-      } while (rands.includes(rand) && rands.length < charPool.length);
+    function init() {
+        $('#cbGroup :input[type=checkbox]').click(function() {
+            let disable = !isCheckboxChecked();
+            btnGenerate.attr('disabled', disable);
+            btnRemind.attr('disabled', disable);
+        });
 
-      rands.push(rand);
-      password.push(charPool[rand]);
-  }
-  var result=password.join('');
-  passwordInput.value=result;
-}
+        $('#cbExcludeChars').change(function() {
+            $('#excludeInput').attr('disabled', !this.checked);
+        });
 
-visible.addEventListener('click',toggle);
-copy.addEventListener('click', copyToClipboard);
+        $('#excludeInput').attr('disabled', true);
 
-upperCase.addEventListener('click', validateOptions);
-lowerCase.addEventListener('click', validateOptions);
-numbers.addEventListener('click', validateOptions);
-symbols.addEventListener('click', validateOptions);
-noRepeat.addEventListener('click', validateOptions);
-specialChars.addEventListener('click', validateOptions);
-excludeChars.addEventListener('click', validateOptions);
-excludeInput.addEventListener('click', validateOptions);
+        $('#btnGenerate').click(function() {
+            $('#passwordInput').val(generatePassword());
+        });
 
-excludeInput.addEventListener('input', () => {
-  excludeChars.checked = true;
+        $("#imgVisible").click(toggleImgVisible);
+
+        $('#btnCopy').click(function() {
+            $("#passwordInput").select();
+            document.execCommand("copy");
+        });
+
+        for (const [cbID, enable] of Object.entries(DEFAULT_OPTIONS))
+            $(cbID).attr('checked', enable);
+
+        $('#passLenInput').val(DEFAULT_PASS_LEN);
+        $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
+    }
+
+    function getPool() {
+        let options = {
+            '#cbNumbers': '0123456789',
+            '#cbLowerCase': 'abcdefghijklmnopqrstuvwxyz',
+            '#cbUpperCase': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            '#cbSymbols': '@#$%^&*()+-=!_',
+            '#cbSpecialChars': '~`{}[]|\\\"\':;?/><.,'
+        };
+
+        let isExcludeCharEnable = $('#cbExcludeChars').is(':checked');
+        let excludeVal = $('#excludeInput').val();
+
+        if (isExcludeCharEnable)
+            for (const [cbID, pool] of Object.entries(options))
+                options[cbID] = pool.replace(new RegExp(`[${excludeVal}]`, 'g'), '');
+
+        let charPool = [];
+        for (const [cbID, pool] of Object.entries(options))
+            if ($(cbID).is(':checked'))
+                charPool.push(pool);
+
+        return charPool;
+    }
+
+
+    function generatePassword() {
+        let passLen = Number($('#passLenInput').val());
+
+        if (passLen < DEFAULT_MIN_LEN) {
+            alert("The minimum password length is 6");
+            return '';
+        }
+
+        let charPool = getPool();
+        let charPoolTotalLen = charPool.reduce(function(result, pool) {
+            return result += pool.length;
+        }, 0);
+
+        let dontRepeatChar = $('#cbDontRepeatChars').is(':checked');
+        if (dontRepeatChar && charPoolTotalLen < passLen) {
+            alert("With your current setting, the password length should not exceed " +
+                charPoolTotalLen + " characters");
+            return '';
+        }
+
+        let password = '';
+        let usedChar = new Set();
+
+        for (let index = 0; password.length < passLen; index++) {
+            pool = charPool[index % charPool.length];
+            rand = Math.floor(Math.random() * pool.length);
+
+            if (!dontRepeatChar || !usedChar.has(pool[rand])) {
+                let character = pool[rand];
+                password += character;
+                usedChar.add(character)
+                continue;
+            }
+
+            for (let i = 0; i < pool.length; i++) {
+                if (usedChar.has(pool[i]))
+                    continue;
+
+                let character = pool[i];
+                password += character;
+                usedChar.add(character)
+                break;
+            }
+        }
+        return password;
+    }
+
+    init();
 });
-
-generate.addEventListener("click",generatePassword);
-
