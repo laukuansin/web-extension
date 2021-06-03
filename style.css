@@ -149,11 +149,13 @@ h2
 }
 
 .viewPassword{
-	width: 16px;
-	height:16px;
+	width: 24px;
+	height:24px;
 	margin-left: 10px;
 	position: relative;
+	cursor: pointer;
 }
+
 
 .copy {
 	margin-left: 10px;
@@ -168,11 +170,13 @@ h2
 	cursor: pointer;
 	font-family:Trebuchet MS;
 	border-radius:42px;
+	font-weight: bold;
+
 }
 .copy:hover {
 	background-color:#109fa6;
 }
-.generate{
+ .generate{
 	background-color:rgb(85, 44, 183);
 	border: none;
 	color: white;
@@ -185,9 +189,17 @@ h2
 	cursor: pointer;
 	font-family:Trebuchet MS;
 	border-radius:5px;
+	font-weight: bold;
+
 }
 .generate:hover {
 	background-color:rgb(57, 26, 129);
+} 
+.generate:disabled
+{
+	pointer-events: all;
+	cursor: not-allowed;
+	background-color:rgb(180, 163, 219);
 }
 .reminder{
 	margin-left: 10px;
@@ -200,10 +212,20 @@ h2
 	text-decoration: none;
 	display: inline-block;
 	font-size: 14px;
+	font-weight: bold;
 	cursor: pointer;
 	font-family:Trebuchet MS;
 	border-radius:5px;
 }
 .reminder:hover {
 	background-color:#be0a19;
+}
+.reminder:disabled
+{
+	pointer-events: all;
+	cursor: not-allowed;
+	background-color:#fc9099;
+}
+.exp{
+	color: rgb(160, 160, 160);
 }

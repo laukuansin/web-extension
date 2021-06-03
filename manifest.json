@@ -24,13 +24,14 @@
     },
   "permissions": [
     "storage",
-    "<all_urls>"
-      ],
-    "web_accessible_resources": [
-      "style.min.css",
-      "popup.html",
-      "password.js"
-    ]
+    "<all_urls>",
+    "clipboardWrite"
+  ],
+  "web_accessible_resources": [
+    "style.min.css",
+    "popup.html",
+    "password.js"
+  ]
  
 
 }
