@@ -3,7 +3,6 @@
   "manifest_version": 2,
   "name": "TL Password Generator",
   "version": "1.0",
-  "default_locale": "en",
   "description": "Generate the password",
 
   "icons": {
@@ -24,17 +23,14 @@
     "default_popup": "popup.html"
     },
   "permissions": [
-    "storage"
+    "storage",
+    "<all_urls>"
       ],
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file://*/*"
-      ],
-      "js": ["content.js"]
-    }
-  ]
+    "web_accessible_resources": [
+      "style.min.css",
+      "popup.html",
+      "password.js"
+    ]
+ 
 
 }
