@@ -12,7 +12,7 @@ const DEFAULT_MIN_LEN = 6;
 
 $(document).ready(function() {
     var btnGenerate = $('#btnGenerate');
-    var btnRemind = $('#btnRemind');
+    var btnRemind = $('#btnReminder');
 
     function toggleImgVisible() {
         let passwordInput = $("#passwordInput");
@@ -63,7 +63,7 @@ $(document).ready(function() {
 
         $('#passLenInput').val(DEFAULT_PASS_LEN);
         $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
-        $("#versionName").text(browser.runtime.getManifest().version);
+        // $("#versionName").text(browser.runtime.getManifest().version);
     }
 
     function getPool() {

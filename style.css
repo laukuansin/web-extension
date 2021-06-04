@@ -205,7 +205,7 @@ h2 {
     background-color: #be0a19;
 }
 
-#reminder:disabled {
+#btnReminder:disabled {
     pointer-events: all;
     cursor: not-allowed;
     background-color: #fc9099;
