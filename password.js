@@ -14,8 +14,6 @@ $(document).ready(function() {
     var btnGenerate = $('#btnGenerate');
     var btnRemind = $('#btnRemind');
 
-    $("#versionName").text(browser.runtime.getManifest().version);
-
     function toggleImgVisible() {
         let passwordInput = $("#passwordInput");
         let imgVisible = $('#imgVisible');
@@ -65,6 +63,7 @@ $(document).ready(function() {
 
         $('#passLenInput').val(DEFAULT_PASS_LEN);
         $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
+        $("#versionName").text(browser.runtime.getManifest().version);
     }
 
     function getPool() {
