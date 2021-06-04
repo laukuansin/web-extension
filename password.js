@@ -3,7 +3,11 @@ const DEFAULT_OPTIONS = {
     '#cbLowerCase': true,
     '#cbUpperCase': true,
     '#cbSymbols': false,
-    '#cbSpecialChars': false
+    '#cbSpecialChars': false,
+    '#passLenInput': 10,
+    '#cbDontRepeatChars': false,
+    '#cbExcludeChars': false,
+    '#excludeInput':'',
 };
 
 const DEFAULT_PASS_LEN = 10;
@@ -40,7 +44,7 @@ $(document).ready(function() {
             btnGenerate.attr('disabled', disable);
             btnRemind.attr('disabled', disable);
         });
-
+        
         $('#cbExcludeChars').change(function() {
             $('#excludeInput').attr('disabled', !this.checked);
         });
@@ -50,12 +54,23 @@ $(document).ready(function() {
         $('#btnGenerate').click(function() {
             $('#passwordInput').val(generatePassword());
         });
-
+        $('#btnHistory').click(viewHistory);
         $("#imgVisible").click(toggleImgVisible);
 
         $('#btnCopy').click(function() {
             $("#passwordInput").select();
             document.execCommand("copy");
+            let current_datetime = new Date()
+            let date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
+            json={
+              'date': date,
+              'password': $('#passwordInput').value
+            };
+            pwd="Password:"+$('#passwordInput').value;
+            obj={
+              [pwd]: json
+            };
+            browser.storage.local.set(obj);
         });
 
         for (const [cbID, enable] of Object.entries(DEFAULT_OPTIONS))
@@ -64,8 +79,32 @@ $(document).ready(function() {
         $('#passLenInput').val(DEFAULT_PASS_LEN);
         $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
         // $("#versionName").text(browser.runtime.getManifest().version);
+        browser.storage.local.get(Object.keys(DEFAULT_OPTIONS)).then((userOptions) => {
+          optionsToForm(Object.assign({}, DEFAULT_OPTIONS, userOptions));
+          document.body.style = '';
+        });
     }
-
+    function viewHistory()
+    {
+      browser.tabs.create({url: browser.extension.getURL('history.html')});
+    }
+    function optionsToForm(options)
+    {
+      Object.keys(options).forEach((name) => {
+        var el = document.getElementById(name);
+        if (!el) return;
+        switch (typeof(options[name]))
+        {
+          case 'boolean':
+            el.checked = options[name];
+            break;
+          case 'string':
+          case 'number':
+            el.value = options[name];
+            break;
+        }
+      });
+    }
     function getPool() {
         let options = {
             '#cbNumbers': '0123456789',
@@ -92,6 +131,17 @@ $(document).ready(function() {
 
 
     function generatePassword() {
+        options = {
+          lowercase: $('#cbLowerCase').checked,
+          uppercase: $('#cbUpperCase').checked,
+          numbers: $('#cbNumbers').checked,
+          symbols: $('#cbSymbols').checked,
+          specialChar: $('#cbSpecialChars').checked,
+          noRepeat: $('#cbDontRepeatChars').checked,
+          excludeChars: $('#cbExcludeChars').checked,
+          excludeInput: $('#excludeInput').value,
+          length: Number($('#passLenInput')
+        };
         let passLen = Number($('#passLenInput').val());
 
         if (passLen < DEFAULT_MIN_LEN) {
@@ -135,6 +185,8 @@ $(document).ready(function() {
                 break;
             }
         }
+        browser.storage.local.set(options);
+
         return password;
     }
 

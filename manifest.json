@@ -30,6 +30,7 @@
   "web_accessible_resources": [
     "style.min.css",
     "popup.html",
+    "history.html",
     "password.js"
   ]
  
