@@ -75,8 +75,8 @@ $(document).ready(function() {
         $("#imgVisible").click(toggleImgVisible);
 
         $('#btnCopy').click(function() {
-           
-            if(!$('#passwordInput').value())
+            var pwd=$('#passwordInput').val();
+            if(pwd!=="")
             {
                 $("#passwordInput").select();
                 document.execCommand("copy");
@@ -84,9 +84,9 @@ $(document).ready(function() {
                 let date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
                 json={
                   'date': date,
-                  'password': $('#passwordInput').val()
+                  'password': pwd
                 };
-                pwd="Password:"+$('#passwordInput').val();
+                pwd="Password:"+pwd;
                 obj={
                   [pwd]: json
                 };
