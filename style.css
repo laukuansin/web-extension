@@ -201,6 +201,26 @@ h2
 	cursor: not-allowed;
 	background-color:rgb(180, 163, 219);
 }
+.history{
+	margin-left: 10px;
+	background-color:#1daf3c;
+	border: none;
+	color: white;
+	margin-top: 10px;
+  	padding: 6px 10px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	font-family:Trebuchet MS;
+	border-radius:5px;
+}
+
+.history:hover {
+	background-color:#1f692f;
+}
 .reminder{
 	margin-left: 10px;
 	background-color:#f70f22;

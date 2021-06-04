@@ -22,6 +22,7 @@ var excludeChars=document.getElementById("excludeChars");
 var generate=document.getElementById("generate");
 var remind=document.getElementById("reminder");
 var excludeInput=document.getElementById("excludeInput");
+var viewHis=document.getElementById("history");
 
 document.getElementById("version_name").innerHTML=browser.runtime.getManifest().version;
 function optionsToForm(options)
@@ -44,6 +45,18 @@ function optionsToForm(options)
 function copyToClipboard(text) {
   passwordInput.select();
   document.execCommand("copy");
+  let current_datetime = new Date()
+  let date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
+  json={
+    'date': date,
+    'password': passwordInput.value
+  };
+  pwd="Password:"+passwordInput.value;
+  obj={
+    [pwd]: json
+  };
+  browser.storage.local.set(obj);
+
 }
 function toggle()
 {
@@ -88,7 +101,7 @@ function generatePassword(){
     alert("The minimum password length is 6");
     return;
   }
-  for (;;) {
+  
     options = {
       lowercase: document.getElementById('lowercase').checked,
       uppercase: document.getElementById('uppercase').checked,
@@ -98,7 +111,7 @@ function generatePassword(){
       noRepeat: document.getElementById('noRepeat').checked,
       excludeChars: document.getElementById('excludeChars').checked,
       excludeInput: document.getElementById('excludeInput').value,
-      length: length,
+      length: length
     };
     excludePool = options.excludeInput;
 
@@ -119,9 +132,7 @@ function generatePassword(){
       charPool = charPool.replace(removeReg, "");
     }
     
-    if (charPool)
-      break;
-  }
+   
   if(options.noRepeat)
   {
     if(charPool.length<length)
@@ -164,10 +175,13 @@ function ContainsAny(array1, array2)
 
 	return false;
 }
-
+function viewHistory()
+{
+  browser.tabs.create({url: browser.extension.getURL('history.html')});
+}
 visible.addEventListener('click',toggle);
 copy.addEventListener('click', copyToClipboard);
-
+remind.addEventListener('click',viewHistory);
 uppercase.addEventListener('click', validateOptions);
 lowercase.addEventListener('click', validateOptions);
 numbers.addEventListener('click', validateOptions);
@@ -175,11 +189,11 @@ symbols.addEventListener('click', validateOptions);
 noRepeat.addEventListener('click', validateOptions);
 specialChars.addEventListener('click', validateOptions);
 excludeChars.addEventListener('click', validateOptions);
-excludeInput.addEventListener('click', validateOptions);
-
+viewHis.addEventListener('click',viewHistory);
 excludeInput.addEventListener('input', () => {
   excludeChars.checked = true;
 });
+
 
 generate.addEventListener("click",generatePassword);
 browser.storage.local.get(Object.keys(defaultOptions)).then((userOptions) => {
