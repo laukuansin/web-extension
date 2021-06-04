@@ -3,6 +3,20 @@ $(document).ready(function() {
     function init() {
         var button=document.querySelector('table');
         button.addEventListener("click",buttonHandle);
+        $('#btnClearAll').click(function () {
+            browser.storage.local.get().then(function (result){            
+                for(const key of Object.keys(result))
+                {
+                    if(key.startsWith('Password:'))
+                    {
+                        browser.storage.local.remove(key);
+                    }    
+                    //results.push({'key':key,'obj':result[key]});
+                }
+            });
+            window.location.reload(true);
+
+        });
         function buttonHandle(e)
         {
             if(e.target.classList.contains("btnCopy"))
@@ -21,6 +35,7 @@ $(document).ready(function() {
         {
             row=e.target.closest("tr");
             password=row.cells[0].innerHTML;
+            password=(password.replace(/&gt;/g,'<').replace(/&lt;/g, '>').replace(/&amp;/g,'&'));
             try {
                 await navigator.clipboard.writeText(password);
                 alert('Password copied to clipboard');
@@ -32,9 +47,12 @@ $(document).ready(function() {
         {
             row=e.target.closest("tr");
             password=row.cells[0].innerHTML;
+            password=(password.replace(/&gt;/g,'<').replace(/&lt;/g, '>').replace(/&amp;/g,'&'));
+
+            key="Password:"+password;
+            browser.storage.local.remove(key);
 
             row.remove();
-            browser.storage.local.remove("Password:"+password);
             alert("Remove successful");
         }
         browser.storage.local.get().then(function (result){
@@ -45,7 +63,7 @@ $(document).ready(function() {
                 if(key.startsWith('Password:'))
                     results.push({'key':key,'obj':result[key]});
             }
-            results.sort((x,y)=>{y.obj['date']-x.obj['date']});
+            //results.sort((x,y)=>{y.obj['date']-x.obj['date']});
             createTable(results);
         });
         
