@@ -1,1 +1,1 @@
-# web-extension
+# TL Password Generator
