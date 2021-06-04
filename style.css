@@ -159,7 +159,7 @@ h2 {
 }
 .btnRemove {
     margin-left: 10px;
-    background-color: #fa0505;
+    background-color: #fae105;
     border: none;
     color: white;
     padding: 6px 10px;
@@ -174,7 +174,7 @@ h2 {
 }
 
 .btnRemove:hover {
-    background-color: #a80303;
+    background-color: #9b8b01;
 }
 #btnGenerate {
     background-color: rgb(85, 44, 183);
@@ -247,6 +247,26 @@ h2 {
 
 #btnHistory:hover {
 	background-color:#1f692f;
+}
+#btnClearAll {
+    margin-left: 10px;
+    background-color: #f70f22;
+    border: none;
+    color: white;
+    margin-top: 10px;
+    padding: 6px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Trebuchet MS;
+    border-radius: 5px;
+}
+
+#btnClearAll:hover {
+    background-color: #be0a19;
 }
 .exp {
     color: rgb(160, 160, 160);
