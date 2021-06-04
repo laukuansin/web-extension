@@ -1,72 +1,76 @@
 <!DOCTYPE html>
 
 <html lang="en" dir="ltr">
-    <head>
-        <link rel="stylesheet" href="style.css"/>
-        <meta charset="utf-8">
-    </head>
 
-    <body>
-       <div class="head">
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="head">
         <img src="images/password-32.png" alt="icon">
-		<h1>TL Password Generator</h1>
-		<span class="version" id="version_name"><span>
+        <h1>TL Password Generator</h1>
+        <span class="version" id="versionName"><span>
         </div>
         <hr class="line">
-        <div class="group">
-            <label for="length" style="margin: 5px 0px;"><b loc="length">Password length</b></label>
-            <input id="length" type="number" min="6" value="8" name="length"/>
+        <div class="group" style='margin-bottom: 10px;'>
+            <label for="passLenInput" style="margin: 5px 0px;"><b>Password length</b></label>
+            <input id="passLenInput" type="number"/>
             <label><span loc="hint">Reccommended password length:</span> <b>16-32</b></label>
-            <label><span loc="hint">Minimum password length:</span> <b>6</b></label>
+        <label><span loc="hint">Minimum password length:</span> <b id='minPassLenLbl'></b></label>
+    </div>
+    <div class="group" id="cbGroup">
+        <label class="checkbox control">
+                <input id="cbNumbers" type="checkbox"/>
+                <span class="mark"></span>
+                <span>Numbers: </span><span class="exp">1234567890</span>
+            </label>
+        <label class="checkbox control">
+                <input id="cbLowerCase" type="checkbox"/>
+                <span class="mark"></span>
+                <span>Lowercase characters: </span><span class="exp">abcdefghijklmnopqrstuvwxyz</span>
+            </label>
+        <label class="checkbox control">
+                <input id="cbUpperCase" type="checkbox">
+                <span class="mark"></span>
+                <span>Uppercase characters: </span><span class="exp">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
+            </label>
+        <label class="checkbox control">
+                <input id="cbSymbols" type="checkbox"/>
+                <span class="mark"></span>
+                <span>Symbols: </span><span class="exp">@#$%^&*()+-=!_</span>
+            </label>
+        <label class="checkbox control">
+                <input id="cbSpecialChars" type="checkbox" />
+                <span class="mark"></span>
+                <span>Other special characters: <span class="exp">~`{}[]\:;"'&lt;&gt;,.?/</span>
+            </label>
+    </div>
+    <div class="group" style='margin-bottom: 10px;'>
+        <label class="checkbox control">
+            <input id="cbDontRepeatChars" type="checkbox" />
+            <span class="mark"></span>
+            <span>Do not repeat characters</span>
+        </label>
+        <label class="checkbox control">
+            <input id="cbExcludeChars" type="checkbox" />
+            <span class="mark"></span>
+            <span>Exclude</span>
+            <input id="excludeInput" class="form-control" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
+    </label>
+    </div>
+    <div>
+        <div class="password">
+            <input id="passwordInput" type="text" />
+            <img src="images/hide.png" id="imgVisible" class="viewPassword" alt="icon">
+            <button id="btnCopy">Copy</button>
         </div>
-        <div class="group">
-            <label class="checkbox control">
-                <input id="numbers" type="checkbox" checked="checked" name="numbers"/>
-                <span class="mark"></span>
-                <span loc="numbers">Numbers: </span><span class="exp">1234567890</span>
-            </label>
-            <label class="checkbox control">
-                <input id="lowercase" type="checkbox" checked="checked" name="lowercase"/>
-                <span class="mark"></span>
-                <span loc="lowercase">Lowercase characters: </span><span class="exp">abcdefghijklmnopqrstuvwxyz</span>
-            </label>
-            <label class="checkbox control">
-                <input id="uppercase" type="checkbox" name="uppercase" checked="checked"/>
-                <span class="mark"></span>
-                <span loc="uppercase">Uppercase characters: </span><span class="exp">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
-            </label>
-            <label class="checkbox control">
-                <input id="symbols" type="checkbox" name="symbols"/>
-                <span class="mark"></span>
-                <span loc="symbols">Symbols: </span><span class="exp">@#$%^&*()+-=!_</span>
-            </label>
-            <label class="checkbox control">
-                <input id="specialChars" type="checkbox" name="specialChars"/>
-                <span class="mark"></span>
-                <span loc="specialChars">Other special characters: <span class="exp">~`{}[]\:;"'&lt;&gt;,.?/</span>
-            </label>
-            <label class="checkbox control">
-                <input id="noRepeat" type="checkbox" name="noRepeat"/>
-                <span class="mark"></span>
-                <span><span loc="noRepeat">Do not repeat characters</span>
-            </label>
-            <label class="checkbox control">
-                <input id="excludeChars" type="checkbox" name="excludeChars"/>
-                <span class="mark"></span>
-                <span loc="excludeChars">Exclude</span>
-                <input id="excludeInput" class="form-control" name="excludeInput" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
-            </label>
-        </div>
-        <div>
-            <div class="password">
-                <input id="passwordInput" class="passwordInput" type="text" name="passwordInput"/>
-                <img src="images/hide.png" id="visible" class="viewPassword" alt="icon">
-                <button class="copy" id="copy">Copy</button>
-            </div>
-            <button class="generate" id="generate">Generate Password</button>
-            <button class="reminder" id="reminder">Reminder</button>
-        </div>
-        <script src="password.js"></script>
-    </body>
+        <button id="btnGenerate">Generate Password</button>
+        <button id="btnReminder">Reminder</button>
+    </div>
+    <script src="jquery.js"></script>
+    <script src="password.js"></script>
+</body>
 
 </html>
