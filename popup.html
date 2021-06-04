@@ -16,7 +16,7 @@
         <hr class="line">
         <div class="group" style='margin-bottom: 10px;'>
             <label for="passLenInput" style="margin: 5px 0px;"><b>Password length</b></label>
-            <input id="passLenInput" type="number"/>
+            <input id="passLenInput" type="number" min="6"/>
             <label><span loc="hint">Reccommended password length:</span> <b>16-32</b></label>
         <label><span loc="hint">Minimum password length:</span> <b id='minPassLenLbl'></b></label>
     </div>
@@ -68,7 +68,7 @@
         </div>
         <button id="btnGenerate">Generate Password</button>
         <button id="btnReminder">Reminder</button>
-        <button id="btnHistory">Reminder</button>
+        <button id="btnHistory">History</button>
 
     </div>
     <script src="jquery.js"></script>
