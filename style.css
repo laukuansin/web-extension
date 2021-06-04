@@ -138,7 +138,7 @@ h2 {
     cursor: pointer;
 }
 
-#btnCopy {
+.btnCopy {
     margin-left: 10px;
     background-color: #05eafa;
     border: none;
@@ -154,9 +154,10 @@ h2 {
     font-weight: bold;
 }
 
-#btnCopy:hover {
+.btnCopy:hover {
     background-color: #109fa6;
 }
+
 .btnRemove {
     margin-left: 10px;
     background-color: #fae105;
@@ -176,6 +177,7 @@ h2 {
 .btnRemove:hover {
     background-color: #9b8b01;
 }
+
 #btnGenerate {
     background-color: rgb(85, 44, 183);
     border: none;
@@ -228,26 +230,28 @@ h2 {
     cursor: not-allowed;
     background-color: #fc9099;
 }
-#btnHistory{
-	margin-left: 10px;
-	background-color:#1daf3c;
-	border: none;
-	color: white;
-	margin-top: 10px;
-  	padding: 6px 10px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 14px;
-	font-weight: bold;
-	cursor: pointer;
-	font-family:Trebuchet MS;
-	border-radius:5px;
+
+#btnHistory {
+    margin-left: 10px;
+    background-color: #1daf3c;
+    border: none;
+    color: white;
+    margin-top: 10px;
+    padding: 6px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: Trebuchet MS;
+    border-radius: 5px;
 }
 
 #btnHistory:hover {
-	background-color:#1f692f;
+    background-color: #1f692f;
 }
+
 #btnClearAll {
     margin-left: 10px;
     background-color: #f70f22;
@@ -268,36 +272,35 @@ h2 {
 #btnClearAll:hover {
     background-color: #be0a19;
 }
+
 .exp {
     color: rgb(160, 160, 160);
 }
+
 table {
     box-sizing: border-box;
     overflow: hidden;
     margin: 4em auto;
     border-collapse: collapse;
-    min-width: 23em; width: 70%; max-width: 56em;
+    min-width: 23em;
+    width: 70%;
+    max-width: 56em;
     border-radius: .5em;
     box-shadow: 0 0 .5em #000;
     border: none;
-  }
+}
 
-tr:nth-child(even)
-{
+tr:nth-child(even) {
     background-color: #dddddd;
 }
-tbody {
-  display: flex;
-  flex-direction: column;
-  color: #000;
-  border: none;
-}
+
 th {
     background-color: rgb(85, 44, 183);
     color: white;
     border: black;
-  }
-td{
+}
+
+td {
     text-align: center;
     padding: 20px;
 }

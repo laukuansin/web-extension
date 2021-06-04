@@ -7,12 +7,11 @@ const DEFAULT_OPTIONS = {
     'passLenInput': 10,
     'cbDontRepeatChars': false,
     'cbExcludeChars': false,
-    'excludeInput':'',
+    'excludeInput': '',
 };
 
 const DEFAULT_PASS_LEN = 10;
 const DEFAULT_MIN_LEN = 6;
-
 
 $(document).ready(function() {
     var btnGenerate = $('#btnGenerate');
@@ -37,81 +36,28 @@ $(document).ready(function() {
             return result |= cb.checked;
         }, false);
     }
-    function optionsToForm(options)
-    {
-      Object.keys(options).forEach((name) => {
-        var el = document.getElementById(name);
-        if (!el) return;
-        switch (typeof(options[name]))
-        {
-          case 'boolean':
-            el.checked = options[name];
-            break;
-          case 'string':
-          case 'number':
-            el.value = options[name];
-            break;
-        }
-      });
-    }
-    function init() {
-        $('#cbGroup :input[type=checkbox]').click(function() {
-            let disable = !isCheckboxChecked();
-            btnGenerate.attr('disabled', disable);
-            btnRemind.attr('disabled', disable);
-        });
-        
-        $('#cbExcludeChars').change(function() {
-            $('#excludeInput').attr('disabled', !this.checked);
-        });
 
-        $('#excludeInput').attr('disabled', true);
-
-        $('#btnGenerate').click(function() {
-            $('#passwordInput').val(generatePassword());
-            storeOptions();
-        });
-        $('#btnHistory').click(viewHistory);
-        $("#imgVisible").click(toggleImgVisible);
-
-        $('#btnCopy').click(function() {
-            var pwd=$('#passwordInput').val();
-            if(pwd!=="")
-            {
-                $("#passwordInput").select();
-                document.execCommand("copy");
-                let current_datetime = new Date()
-                let date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
-                json={
-                  'date': date,
-                  'password': pwd
-                };
-                pwd="Password:"+pwd;
-                obj={
-                  [pwd]: json
-                };
-                browser.storage.local.set(obj);
+    function loadOptionsToForm(options) {
+        Object.keys(options).forEach((name) => {
+            var el = document.getElementById(name);
+            if (!el) return;
+            switch (typeof(options[name])) {
+                case 'boolean':
+                    el.checked = options[name];
+                    break;
+                case 'string':
+                case 'number':
+                    el.value = options[name];
+                    break;
             }
-           
-        });
-
-        for (const [cbID, enable] of Object.entries(DEFAULT_OPTIONS))
-            $(cbID).attr('checked', enable);
-
-        $('#passLenInput').val(DEFAULT_PASS_LEN);
-        $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
-        $("#versionName").text(browser.runtime.getManifest().version);
-        browser.storage.local.get(Object.keys(DEFAULT_OPTIONS)).then((userOptions) => {
-          optionsToForm(Object.assign({}, DEFAULT_OPTIONS, userOptions));
-          document.body.style = '';
         });
     }
-    function viewHistory()
-    {
-      browser.tabs.create({url: browser.extension.getURL('history.html')});
+
+    function viewHistory() {
+        browser.tabs.create({ url: browser.extension.getURL('history.html') });
     }
-    function storeOptions()
-    {
+
+    function storeOptions() {
         options = {
             'cbLowerCase': $('#cbLowerCase').is(":checked"),
             'cbUpperCase': $('#cbUpperCase').is(":checked"),
@@ -121,11 +67,25 @@ $(document).ready(function() {
             'cbDontRepeatChars': $('#cbDontRepeatChars').is(":checked"),
             'cbExcludeChars': $('#cbExcludeChars').is(":checked"),
             'excludeInput': $('#excludeInput').val(),
-            'passLenInput': Number( $('#passLenInput').val())
+            'passLenInput': Number($('#passLenInput').val())
         };
         browser.storage.local.set(options);
-
     }
+
+    function storePasswords(pass) {
+        let passList = [];
+        if (localStorage.TLPassGeneratorPass !== undefined) {
+            passList = JSON.parse(localStorage.TLPassGeneratorPass);
+        }
+        passList.push({
+            'date': new Date(),
+            'password': pass
+        });
+
+        localStorage.setItem('TLPassGeneratorPass', JSON.stringify(passList));
+        console.log(localStorage.TLPassGeneratorPass);
+    }
+
     function getPool() {
         let options = {
             '#cbNumbers': '0123456789',
@@ -152,7 +112,6 @@ $(document).ready(function() {
 
 
     function generatePassword() {
-        
         let passLen = Number($('#passLenInput').val());
 
         if (passLen < DEFAULT_MIN_LEN) {
@@ -198,6 +157,49 @@ $(document).ready(function() {
         }
 
         return password;
+    }
+
+    function init() {
+        $('#cbGroup :input[type=checkbox]').click(function() {
+            let disable = !isCheckboxChecked();
+            btnGenerate.attr('disabled', disable);
+            btnRemind.attr('disabled', disable);
+        });
+
+        $('#cbExcludeChars').change(function() {
+            $('#excludeInput').attr('disabled', !this.checked);
+        });
+
+        $('#excludeInput').attr('disabled', true);
+
+        $('#btnGenerate').click(function() {
+            $('#passwordInput').val(generatePassword());
+            storeOptions();
+        });
+
+        $('#btnHistory').click(viewHistory);
+        $("#imgVisible").click(toggleImgVisible);
+
+        $('#btnCopy').click(function() {
+            var pwd = $('#passwordInput').val();
+            if (pwd !== "") {
+                $("#passwordInput").select();
+                document.execCommand("copy");
+                storePasswords(pwd);
+            }
+        });
+
+        for (const [cbID, enable] of Object.entries(DEFAULT_OPTIONS))
+            $(cbID).attr('checked', enable);
+
+        $('#passLenInput').val(DEFAULT_PASS_LEN);
+        $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
+        $("#versionName").text(browser.runtime.getManifest().version);
+
+        browser.storage.local.get(Object.keys(DEFAULT_OPTIONS)).then((userOptions) => {
+            loadOptionsToForm(Object.assign({}, DEFAULT_OPTIONS, userOptions));
+            document.body.style = '';
+        });
     }
 
     init();
