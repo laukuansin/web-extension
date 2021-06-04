@@ -23,10 +23,10 @@ $(document).ready(function() {
                 `
                 <tr>
                     <td>${pass.password}</td>
-                    <td>${pass['date']}</td>
+                    <td>${(new Date(pass['date'])).toUTCString()}</td>
                     <td>
-                        <button class="btnCopy">Copy</button> 
-                        <button class="btnRemove">Remove</button>
+                        <button class="btnCopy btn btn-link">Copy</button> 
+                        <button class="btnRemove btn btn-link text-danger">Remove</button>
                     </td>
                 </tr> 
                 `
@@ -51,6 +51,8 @@ $(document).ready(function() {
             if (localStorage.TLPassGeneratorPass)
                 localStorage.TLPassGeneratorPass = JSON.stringify([]);
         });
+
+        $("#versionName").text(browser.runtime.getManifest().version);
 
         if (localStorage.TLPassGeneratorPass !== undefined) {
             let passList = JSON.parse(localStorage.TLPassGeneratorPass);
