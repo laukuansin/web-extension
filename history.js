@@ -1,89 +1,63 @@
 $(document).ready(function() {
-   
-    function init() {
-        var button=document.querySelector('table');
-        button.addEventListener("click",buttonHandle);
-        $('#btnClearAll').click(function () {
-            browser.storage.local.get().then(function (result){            
-                for(const key of Object.keys(result))
-                {
-                    if(key.startsWith('Password:'))
-                    {
-                        browser.storage.local.remove(key);
-                    }    
-                    //results.push({'key':key,'obj':result[key]});
-                }
-            });
-            window.location.reload(true);
 
-        });
-        function buttonHandle(e)
-        {
-            if(e.target.classList.contains("btnCopy"))
-            {
-                copy(e);
-            }
-            if(e.target.classList.contains("btnRemove"))
-            {
-               remove(e);
-            }
-            else{
-                return;
-            }
-        }
-        async function copy(e)
-        {
-            row=e.target.closest("tr");
-            password=row.cells[0].innerHTML;
-            password=(password.replace(/&gt;/g,'<').replace(/&lt;/g, '>').replace(/&amp;/g,'&'));
-            try {
-                await navigator.clipboard.writeText(password);
-                alert('Password copied to clipboard');
-            } catch(err) {
-                alert('Error in copying text: ', err);
-            }
-        }
-        function remove(e)
-        {
-            row=e.target.closest("tr");
-            password=row.cells[0].innerHTML;
-            password=(password.replace(/&gt;/g,'<').replace(/&lt;/g, '>').replace(/&amp;/g,'&'));
+    function clearClipboardHistory(index) {
+        if (localStorage.TLPassGeneratorPass === undefined)
+            return;
 
-            key="Password:"+password;
-            browser.storage.local.remove(key);
-
-            row.remove();
-            alert("Remove successful");
-        }
-        browser.storage.local.get().then(function (result){
-            let results=[];
-        
-            for(const key of Object.keys(result))
-            {
-                if(key.startsWith('Password:'))
-                    results.push({'key':key,'obj':result[key]});
-            }
-            //results.sort((x,y)=>{y.obj['date']-x.obj['date']});
-            createTable(results);
-        });
-        
+        let passList = JSON.parse(localStorage.TLPassGeneratorPass);
+        passList.splice(passList.length - 1 - index, 1);
+        localStorage.TLPassGeneratorPass = JSON.stringify(passList);
     }
-    function createTable(results) {
-       
-        for(let result of results)
-        {
-            var table = document.getElementById("table");
-            var rowCount = table.rows.length;
-            var row = table.insertRow(rowCount);
-    
-            row.insertCell(0).innerHTML= result.obj['password'];
-            row.insertCell(1).innerHTML= result.obj['date'];
-            row.insertCell(2).innerHTML= '<button class="btnCopy" id="btnCopy">Copy</button> <button class="btnRemove">Remove</button>';
+
+    async function copyToClipboard(password) {
+        try {
+            await navigator.clipboard.writeText(password);
+        } catch (err) {
+            alert('Error in copying text: ', err);
         }
-      
+    }
+
+    function createTable(passList) {
+        passList.forEach(pass => {
+            $('#table > tbody:last-child').append(
+                `
+                <tr>
+                    <td>${pass.password}</td>
+                    <td>${pass['date']}</td>
+                    <td>
+                        <button class="btnCopy">Copy</button> 
+                        <button class="btnRemove">Remove</button>
+                    </td>
+                </tr> 
+                `
+            );
+
+            let lastRow = $('#table tr:last');
+            lastRow.find('.btnCopy').click(async function() {
+                await copyToClipboard(pass.password);
+            });
+
+            lastRow.find('.btnRemove').click(function() {
+                clearClipboardHistory(lastRow.index());
+                lastRow.remove();
+            });
+        });
     };
+
+    function init() {
+        $('#btnClearAll').click(function() {
+            $('#table tbody').empty();
+
+            if (localStorage.TLPassGeneratorPass)
+                localStorage.TLPassGeneratorPass = JSON.stringify([]);
+        });
+
+        if (localStorage.TLPassGeneratorPass !== undefined) {
+            let passList = JSON.parse(localStorage.TLPassGeneratorPass);
+            passList.reverse();
+            createTable(passList);
+        }
+    }
 
     init();
 });
-
-
