@@ -158,6 +158,32 @@ $(document).ready(function() {
         return password;
     }
 
+    function remindPassword()
+    {
+        var pwd=$('#passwordInput').val();
+        if(pwd!=="")
+        {
+            let current_datetime = new Date()
+            current_datetime.setMonth(current_datetime.getMonth()+3);
+            let date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
+            message=pwd+" password will be reminder after 3 month which is "+date+" for the security purpose";
+            alert(message);
+            json={
+                'date': date,
+                'password': pwd
+            };
+            pwd="Remind:"+pwd;
+            obj={
+                [pwd]: json
+            };
+            browser.storage.local.set(obj);
+            
+        }
+        else{
+            alert("The password is currently empty! Please click reminder after generate a password");
+        }
+    }
+
     function init() {
         $('#cbGroup :input[type=checkbox]').click(function() {
             let disable = !isCheckboxChecked();
@@ -187,6 +213,8 @@ $(document).ready(function() {
                 storePasswords(pwd);
             }
         });
+
+        $('#btnRemind').click(remindPassword);
 
         for (const [cbID, enable] of Object.entries(DEFAULT_OPTIONS))
             $(cbID).attr('checked', enable);

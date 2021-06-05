@@ -1,5 +1,4 @@
 {
-
   "manifest_version": 2,
   "name": "TL Password Generator",
   "version": "1.0",
@@ -25,13 +24,20 @@
   "permissions": [
     "storage",
     "<all_urls>",
-    "clipboardWrite"
+    "clipboardWrite",
+    "notifications"
   ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
   "web_accessible_resources": [
     "style.min.css",
     "popup.html",
     "history.html",
-    "password.js"
+    "password.js",
+    "history.js"
   ]
  
 
