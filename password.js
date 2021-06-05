@@ -14,9 +14,6 @@ const DEFAULT_PASS_LEN = 10;
 const DEFAULT_MIN_LEN = 6;
 
 $(document).ready(function() {
-    var btnGenerate = $('#btnGenerate');
-    var btnRemind = $('#btnReminder');
-
     function toggleImgVisible() {
         let passwordInput = $("#passwordInput");
         let imgVisible = $('#imgVisible');
@@ -51,6 +48,8 @@ $(document).ready(function() {
                     break;
             }
         });
+
+        $('#excludeInput').attr('disabled', !$('#cbExcludeChars').is(':checked'));
     }
 
     function viewHistory() {
@@ -162,8 +161,8 @@ $(document).ready(function() {
     function init() {
         $('#cbGroup :input[type=checkbox]').click(function() {
             let disable = !isCheckboxChecked();
-            btnGenerate.attr('disabled', disable);
-            btnRemind.attr('disabled', disable);
+            $('#btnGenerate').attr('disabled', disable);
+            $('#btnReminder').attr('disabled', disable);
         });
 
         $('#cbExcludeChars').change(function() {

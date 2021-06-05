@@ -3,31 +3,41 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <link rel="stylesheet" href="style.css" />
-    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
 </head>
 
 <body>
-    <div class="head">
-        <img src="images/password-32.png" alt="icon">
-        <h1>TL Password Generator</h1>
-        <span class="version" id="version_name"><span>
+    <div class="container my-2">
+        <!--Header-->
+        <div class="d-flex justify-content-center align-self-center">
+            <img src="images/password-32.png" alt="icon">
+            <h3>TL Password Generator</h3>
+            <span class="version" id="versionName"></span>
         </div>
-        <hr class="line">
-        <h1>Password History</h1>
-        <button id="btnClearAll">Clear All</button>
-        <table id="table" border="1" cellpadding="2">
+        <hr/>
+
+        <div class='mb-3'>
+            <h4>Password History</h4>
+        </div>
+        <table class='table table-striped' id="table" border="1">
             <thead>
-              <tr>
-                <th class='prop__name' data-prop-name='password'>Password</th>
-                <th class='prop__name' data-prop-name='date'> Date</th>
-                <th class='prop__name' data-prop-name='option'>Option</th>
-              </tr>
+                <tr>
+                    <th class='prop__name' data-prop-name='password'>Password</th>
+                    <th class='prop__name' data-prop-name='date'> Date</th>
+                    <th class='prop__name' data-prop-name='option'>Option</th>
+                </tr>
             </thead>
             <tbody></tbody>
         </table>
-        <script src="jquery.js"></script>
-        <script src="history.js"></script>
-    </body>
+
+        <div class="d-flex justify-content-end align-self-end">
+
+            <button id="btnClearAll" class='btn btn-danger'>Clear All</button>
+        </div>
+    </div>
+    <script src="jquery.js"></script>
+    <script src="history.js"></script>
+</body>
 
 </html>

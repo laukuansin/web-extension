@@ -3,74 +3,106 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <link rel="stylesheet" href="style.css" />
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
 </head>
 
-<body>
-    <div class="head">
-        <img src="images/password-32.png" alt="icon">
-        <h1>TL Password Generator</h1>
-        <span class="version" id="versionName"><span>
+<body style="min-width: 400px; max-width: 400px;">
+    <div class="container my-2">
+        <!--Header-->
+        <div class="d-flex justify-content-center align-self-center">
+            <img src="images/password-32.png" alt="icon">
+            <h3>TL Password Generator</h3>
+            <span class="version" id="versionName"></span>
         </div>
-        <hr class="line">
-        <div class="group" style='margin-bottom: 10px;'>
-            <label for="passLenInput" style="margin: 5px 0px;"><b>Password length</b></label>
-            <input id="passLenInput" type="number" min="6"/>
-            <label><span loc="hint">Reccommended password length:</span> <b>16-32</b></label>
-        <label><span loc="hint">Minimum password length:</span> <b id='minPassLenLbl'></b></label>
-    </div>
-    <div class="group" id="cbGroup">
-        <label class="checkbox control">
-                <input id="cbNumbers" type="checkbox"/>
-                <span class="mark"></span>
-                <span>Numbers: </span><span class="exp">1234567890</span>
-            </label>
-        <label class="checkbox control">
-                <input id="cbLowerCase" type="checkbox"/>
-                <span class="mark"></span>
-                <span>Lowercase characters: </span><span class="exp">abcdefghijklmnopqrstuvwxyz</span>
-            </label>
-        <label class="checkbox control">
-                <input id="cbUpperCase" type="checkbox">
-                <span class="mark"></span>
-                <span>Uppercase characters: </span><span class="exp">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span>
-            </label>
-        <label class="checkbox control">
-                <input id="cbSymbols" type="checkbox"/>
-                <span class="mark"></span>
-                <span>Symbols: </span><span class="exp">@#$%^&*()+-=!_</span>
-            </label>
-        <label class="checkbox control">
-                <input id="cbSpecialChars" type="checkbox" />
-                <span class="mark"></span>
-                <span>Other special characters: <span class="exp">~`{}[]\:;"'&lt;&gt;,.?/</span>
-            </label>
-    </div>
-    <div class="group" style='margin-bottom: 10px;'>
-        <label class="checkbox control">
-            <input id="cbDontRepeatChars" type="checkbox" />
-            <span class="mark"></span>
-            <span>Do not repeat characters</span>
-        </label>
-        <label class="checkbox control">
-            <input id="cbExcludeChars" type="checkbox" />
-            <span class="mark"></span>
-            <span>Exclude</span>
-            <input id="excludeInput" class="form-control" style="position:relative; display:inline; width:150px;height:20px;opacity: 1;"  type="text"/>
-    </label>
-    </div>
-    <div>
-        <div class="password">
-            <input id="passwordInput" type="text" />
-            <img src="images/hide.png" id="imgVisible" class="viewPassword" alt="icon">
-            <button id="btnCopy">Copy</button>
-        </div>
-        <button id="btnGenerate">Generate Password</button>
-        <button id="btnReminder">Reminder</button>
-        <button id="btnHistory">History</button>
+        <hr/>
 
+        <form>
+            <!--password length-->
+            <div class="mb-4">
+                <label for="passLenInput" class="form-label">Password's length</label>
+                <input type="number" class="form-control" id="passLenInput" a describedby="passLenHelp">
+                <div id="passLenHelp" class="form-text">Recommended: 16 - 32</div>
+                <div id="passLenHelp" class="form-text">Minimum: 6</div>
+            </div>
+
+            <!--Checkbox-->
+            <div id="cbGroup">
+                <label class='form-label'>Options</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbNumbers">
+                    <label class="form-check-label" for="cbNumbers">
+                        Numbers: 1234567890
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbLowerCase">
+                    <label class="form-check-label" for="cbLowerCase">
+                        Lowercase: abcdefghijklmnopqrstuvwxyz
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbUpperCase">
+                    <label class="form-check-label" for="cbUpperCase">
+                        Uppercase: ABCDEFGHIJKLMNOPQRSTUVWXYZ
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbSymbols">
+                    <label class="form-check-label" for="cbSymbols">
+                        Symbols: @#$%^&*()+-=!_
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbSpecialChars">
+                    <label class="form-check-label" for="cbSpecialChars">
+                        Special characters: ~`{}[]\:;"'&lt;&gt;,.?/
+                    </label>
+                </div>
+            </div>
+
+            <!--Non required checkbox-->
+            <div class='mb-4'>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbDontRepeatChars">
+                    <label class="form-check-label" for="cbDontRepeatChars">
+                        Do not repeat characters    
+                    </label>
+                </div>
+            </div>
+
+            <!--Excluded char-->
+            <div class="mb-4">
+                <label class='form-label'>Exclude characters</label>
+                <div class="input-group">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" id='cbExcludeChars' type="checkbox" value="">
+                    </div>
+                    <input type="text" class="form-control" id='excludeInput'>
+                </div>
+            </div>
+
+            <!--Generated Password-->
+            <div class='mb-4'>
+                <label class='form-label'>Password</label>
+                <div class="input-group">
+                    <input type="text" id='passwordInput' class="form-control">
+                    <span class="input-group-text" id="basic-addon2">
+                        <img src="images/hide.png" id="imgVisible" alt="icon" height="20px" width="20px">
+                    </span>
+                    <button class="btn btn-outline-secondary" type="button" id="btnCopy">Copy</button>
+                </div>
+            </div>
+        </form>
+
+        <!--Button-->
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" id='btnGenerate' class="btn btn-primary">Generate password</button>
+            <button type="button" id='btnHistory' class="btn btn-success mx-3">History</button>
+        </div>
     </div>
+    <script src="js/bootstrap.min.js"></script>
     <script src="jquery.js"></script>
     <script src="password.js"></script>
 </body>
