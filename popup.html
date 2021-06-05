@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/bootstrap.min.css" />
 </head>
 
-<body style="min-width: 400px; max-width: 400px;">
-    <div class="container my-2">
+<body style="min-width: 400px;">
+    <div class="container my-4">
         <!--Header-->
         <div class="d-flex justify-content-center align-self-center">
             <img src="images/password-32.png" alt="icon">
@@ -23,7 +23,6 @@
             <div class="mb-4">
                 <label for="passLenInput" class="form-label">Password's length</label>
                 <input type="number" class="form-control" id="passLenInput" a describedby="passLenHelp">
-                <div id="passLenHelp" class="form-text">Recommended: 16 - 32</div>
                 <div id="passLenHelp" class="form-text">Minimum: 6</div>
             </div>
 
@@ -77,7 +76,7 @@
                 <label class='form-label'>Exclude characters</label>
                 <div class="input-group">
                     <div class="input-group-text">
-                        <input class="form-check-input mt-0" id='cbExcludeChars' type="checkbox" value="">
+                        <input class="form-check-input mt-0" id='cbExcludeChars' type="checkbox">
                     </div>
                     <input type="text" class="form-control" id='excludeInput'>
                 </div>
@@ -94,18 +93,28 @@
                     <button class="btn btn-outline-secondary" type="button" id="btnCopy">Copy</button>
                 </div>
             </div>
+
+            <!--Generated Password-->
+            <div class='mb-4'>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="cbExpiryNotification">
+                    <label class="form-check-label" for="cbExpiryNotification">
+                        Password Expiry Notification
+                    </label>
+                </div>
+            </div>
         </form>
 
         <!--Button-->
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" id='btnGenerate' class="btn btn-primary">Generate password</button>
+            <button type="button" id='btnGenerate' class="btn btn-primary">Generate</button>
             <button type="button" id='btnHistory' class="btn btn-success mx-3">History</button>
-            <button type="button" id='btnRemind' class="btn btn-warning mx-3">Remind</button>
-
+            <button type="button" id='btnRemind' class="btn btn-warning ">Save Password</button>
         </div>
     </div>
-    <script src="js/bootstrap.min.js"></script>
     <script src="jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="passwordGenerator.js"></script>
     <script src="password.js"></script>
 </body>
 

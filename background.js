@@ -1,30 +1,22 @@
-setInterval(checkPasswordDuration,1000);
+async function checkPasswordExpiry() {
+    let passGen = new PasswordGenerator();
+    await passGen.importOptionFromLocal();
 
-function checkPasswordDuration()
-{
-    browser.storage.local.get().then(function (result){
-        for(const key of Object.keys(result))
-        {
-            if(key.startsWith('Remind:'))
-            {
-                let current = new Date();
-                dueDate= new Date(result[key]['date']);
-                let leftDate=dueDate-current;
-                dueDate.setMonth(dueDate.getMonth()-3);
-                if(leftDate<=0)
-                {
-                    pwd=result[key]['password'];
-                    message="You have create "+pwd+" password at "+dueDate+", it has been over 3 month. It is a kindly reminder to remind you change a new password for the security purpose. "
-                    browser.notifications.create("tlpasswordgeneratornotification", {
-                        type: "basic",
-                        iconUrl: "images/password-64.png",
-                        title: "TL Password Generator",
-                        message,
-                    });
+    if (!passGen.expiryNotificaiton)
+        return;
 
-                   browser.storage.local.remove(key);
-                }
-            }    
-        }
+    let expiredPassList = await passGen.getExpiredPassword();
+    if (expiredPassList.lenght === 0) return;
+
+    expiredPassList.forEach(pass => {
+        const [domain, _] = pass;
+        browser.notifications.create("tlpasswordgeneratornotification", {
+            type: "basic",
+            iconUrl: "images/password-64.png",
+            title: "TL Password Generator",
+            message: `Your password set in ${domain} has expired. Kindly change your password to secure your account`,
+        });
     });
 }
+
+checkPasswordExpiry();

@@ -3,6 +3,7 @@
 <html lang="en" dir="ltr">
 
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css" />
 </head>
@@ -20,7 +21,25 @@
         <div class='mb-3'>
             <h4>Password History</h4>
         </div>
-        <table class='table table-striped' id="table" border="1">
+        <table class='table table-striped' id="passHistoryTable" border="1">
+            <thead>
+                <tr>
+                    <th class='prop__name' data-prop-name='password'>Domain</th>
+                    <th class='prop__name' data-prop-name='date'> Date</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="d-flex justify-content-end align-self-end">
+
+            <button id="btnClearPassHistory" class='btn btn-danger'>Clear All</button>
+        </div>
+
+        <div class='mb-3'>
+            <h4>Clipboard History</h4>
+        </div>
+        <table class='table table-striped' id="clipboardHistory" border="1">
             <thead>
                 <tr>
                     <th class='prop__name' data-prop-name='password'>Password</th>
@@ -32,11 +51,11 @@
         </table>
 
         <div class="d-flex justify-content-end align-self-end">
-
-            <button id="btnClearAll" class='btn btn-danger'>Clear All</button>
+            <button id="btnClearClipistory" class='btn btn-danger'>Clear All</button>
         </div>
     </div>
     <script src="jquery.js"></script>
+    <script src='./passwordGenerator.js'></script>
     <script src="history.js"></script>
 </body>
 

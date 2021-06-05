@@ -17,9 +17,23 @@ $(document).ready(function() {
         }
     }
 
-    function createTable(passList) {
+    function createPasswordHistoryTable(passList) {
+        for (const [domain, expiredDate] of Object.entries(passList)) {
+            $('#passHistoryTable > tbody:last-child').append(
+                `
+                <tr>
+                    <td><a href='${domain}'>${domain}</a></td>
+                    <td>${(new Date(expiredDate)).toUTCString()}</td>
+                </tr> 
+                `
+            );
+        }
+    }
+
+
+    function createClipboardHistoryTable(passList) {
         passList.forEach(pass => {
-            $('#table > tbody:last-child').append(
+            $('#clipboardHistory > tbody:last-child').append(
                 `
                 <tr>
                     <td>${pass.password}</td>
@@ -32,7 +46,7 @@ $(document).ready(function() {
                 `
             );
 
-            let lastRow = $('#table tr:last');
+            let lastRow = $('#clipboardHistory tr:last');
             lastRow.find('.btnCopy').click(async function() {
                 await copyToClipboard(pass.password);
             });
@@ -44,21 +58,27 @@ $(document).ready(function() {
         });
     };
 
-    function init() {
-        $('#btnClearAll').click(function() {
-            $('#table tbody').empty();
+    async function init() {
+        let passGen = new PasswordGenerator();
+        await passGen.importOptionFromLocal();
 
-            if (localStorage.TLPassGeneratorPass)
-                localStorage.TLPassGeneratorPass = JSON.stringify([]);
+        $('#btnClearClipistory').click(function() {
+            $('#clipboardHistory tbody').empty();
+            passGen.clearClipboardHistory();
+        });
+
+        $('#btnClearPassHistory').click(function() {
+            $('#passHistoryTable tbody').empty();
+            passGen.clearPasswordHistory();
         });
 
         $("#versionName").text(browser.runtime.getManifest().version);
 
-        if (localStorage.TLPassGeneratorPass !== undefined) {
-            let passList = JSON.parse(localStorage.TLPassGeneratorPass);
-            passList.reverse();
-            createTable(passList);
-        }
+        createPasswordHistoryTable(
+            await passGen.importPasswordHistoryFromLocal());
+
+        createClipboardHistoryTable(
+            (await passGen.importClipboardHistoryFromLocal()).reverse());
     }
 
     init();

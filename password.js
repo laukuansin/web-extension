@@ -1,19 +1,6 @@
-const DEFAULT_OPTIONS = {
-    'cbNumbers': true,
-    'cbLowerCase': true,
-    'cbUpperCase': true,
-    'cbSymbols': false,
-    'cbSpecialChars': false,
-    'passLenInput': 10,
-    'cbDontRepeatChars': false,
-    'cbExcludeChars': false,
-    'excludeInput': '',
-};
-
-const DEFAULT_PASS_LEN = 10;
-const DEFAULT_MIN_LEN = 6;
-
 $(document).ready(function() {
+
+
     function toggleImgVisible() {
         let passwordInput = $("#passwordInput");
         let imgVisible = $('#imgVisible');
@@ -27,6 +14,7 @@ $(document).ready(function() {
         }
     }
 
+
     function isCheckboxChecked() {
         let cbs = Object.values($('#cbGroup :input[type=checkbox]'));
         return cbs.reduce(function(result, cb) {
@@ -34,157 +22,88 @@ $(document).ready(function() {
         }, false);
     }
 
-    function loadOptionsToForm(options) {
-        Object.keys(options).forEach((name) => {
-            var el = document.getElementById(name);
-            if (!el) return;
-            switch (typeof(options[name])) {
-                case 'boolean':
-                    el.checked = options[name];
-                    break;
-                case 'string':
-                case 'number':
-                    el.value = options[name];
-                    break;
-            }
-        });
-
-        $('#excludeInput').attr('disabled', !$('#cbExcludeChars').is(':checked'));
-    }
 
     function viewHistory() {
         browser.tabs.create({ url: browser.extension.getURL('history.html') });
     }
 
-    function storeOptions() {
-        options = {
-            'cbLowerCase': $('#cbLowerCase').is(":checked"),
-            'cbUpperCase': $('#cbUpperCase').is(":checked"),
-            'cbNumbers': $('#cbNumbers').is(":checked"),
-            'cbSymbols': $('#cbSymbols').is(":checked"),
-            'cbSpecialChars': $('#cbSpecialChars').is(":checked"),
-            'cbDontRepeatChars': $('#cbDontRepeatChars').is(":checked"),
-            'cbExcludeChars': $('#cbExcludeChars').is(":checked"),
-            'excludeInput': $('#excludeInput').val(),
-            'passLenInput': Number($('#passLenInput').val())
-        };
-        browser.storage.local.set(options);
-    }
 
-    function storePasswords(pass) {
-        let passList = [];
-        if (localStorage.TLPassGeneratorPass !== undefined) {
-            passList = JSON.parse(localStorage.TLPassGeneratorPass);
-        }
-        passList.push({
-            'date': new Date(),
-            'password': pass
-        });
-
-        localStorage.setItem('TLPassGeneratorPass', JSON.stringify(passList));
-        console.log(localStorage.TLPassGeneratorPass);
-    }
-
-    function getPool() {
-        let options = {
-            '#cbNumbers': '0123456789',
-            '#cbLowerCase': 'abcdefghijklmnopqrstuvwxyz',
-            '#cbUpperCase': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-            '#cbSymbols': '@#$%^&*()+-=!_',
-            '#cbSpecialChars': '~`{}[]|\\\"\':;?/><.,'
-        };
-
-        let isExcludeCharEnable = $('#cbExcludeChars').is(':checked');
-        let excludeVal = $('#excludeInput').val();
-
-        if (isExcludeCharEnable)
-            for (const [cbID, pool] of Object.entries(options))
-                options[cbID] = pool.replace(new RegExp(`[${excludeVal}]`, 'g'), '');
-
-        let charPool = [];
-        for (const [cbID, pool] of Object.entries(options))
-            if ($(cbID).is(':checked'))
-                charPool.push(pool);
-
-        return charPool;
+    function copyPassword(passGen) {
+        $("#passwordInput").select();
+        document.execCommand("copy");
+        passGen.exportClipboardHistoryToLocal($('#passwordInput').val());
     }
 
 
-    function generatePassword() {
-        let passLen = Number($('#passLenInput').val());
-
-        if (passLen < DEFAULT_MIN_LEN) {
-            alert("The minimum password length is 6");
-            return '';
-        }
-
-        let charPool = getPool();
-        let charPoolTotalLen = charPool.reduce(function(result, pool) {
-            return result += pool.length;
-        }, 0);
-
-        let dontRepeatChar = $('#cbDontRepeatChars').is(':checked');
-        if (dontRepeatChar && charPoolTotalLen < passLen) {
-            alert("With your current setting, the password length should not exceed " +
-                charPoolTotalLen + " characters");
-            return '';
-        }
-
-        let password = '';
-        let usedChar = new Set();
-
-        for (let index = 0; password.length < passLen; index++) {
-            pool = charPool[index % charPool.length];
-            rand = Math.floor(Math.random() * pool.length);
-
-            if (!dontRepeatChar || !usedChar.has(pool[rand])) {
-                let character = pool[rand];
-                password += character;
-                usedChar.add(character)
-                continue;
-            }
-
-            for (let i = 0; i < pool.length; i++) {
-                if (usedChar.has(pool[i]))
-                    continue;
-
-                let character = pool[i];
-                password += character;
-                usedChar.add(character)
-                break;
-            }
-        }
-
-        return password;
+    function setCurrentOptions(passGen) {
+        passGen.incNumbers = $('#cbNumbers').is(":checked");
+        passGen.incLowerCase = $('#cbLowerCase').is(":checked");
+        passGen.incUpperCase = $('#cbUpperCase').is(":checked");
+        passGen.incSymbol = $('#cbSymbols').is(":checked");
+        passGen.incSpecialChar = $('#cbSpecialChars').is(':checked');
+        passGen.noRepeatChar = $('#cbDontRepeatChars').is(':checked');
+        passGen.passLen = $('#passLenInput').val();
+        passGen.excChar.enable = $('#cbExcludeChars').is(':checked');
+        passGen.excChar.char = $('#excludeInput').val();
+        passGen.expiryNotificaiton = $('#cbExpiryNotification').is(':checked');
+        passGen.exportOptionInLocal();
     }
 
-    function remindPassword()
-    {
-        var pwd=$('#passwordInput').val();
-        if(pwd!=="")
-        {
-            let current_datetime = new Date()
-            current_datetime.setMonth(current_datetime.getMonth()+3);
-            let date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes() + ":" + current_datetime.getSeconds() 
-            message=pwd+" password will be reminder after 3 month which is "+date+" for the security purpose";
-            alert(message);
-            json={
-                'date': date,
-                'password': pwd
-            };
-            pwd="Remind:"+pwd;
-            obj={
-                [pwd]: json
-            };
-            browser.storage.local.set(obj);
-            
-        }
-        else{
-            alert("The password is currently empty! Please click reminder after generate a password");
+
+    function loadCurrentOptions(passGen) {
+        $('#cbNumbers').attr("checked", passGen.incNumbers);
+        $('#cbLowerCase').attr("checked", passGen.incLowerCase);
+        $('#cbUpperCase').attr("checked", passGen.incUpperCase);
+        $('#cbSymbols').attr("checked", passGen.incSymbol);
+        $('#cbSpecialChars').attr('checked', passGen.incSpecialChar);
+        $('#cbDontRepeatChars').attr('checked', passGen.noRepeatChar);
+        $('#passLenInput').val(passGen.passLen);
+        $('#excludeInput').val(passGen.excChar.char);
+
+        $('#cbExpiryNotification').attr('checked', passGen.expiryNotificaiton);
+        if (passGen.excChar.enable)
+            $('#cbExcludeChars').attr('checked', 'checked');
+        else
+            $('#excludeInput').attr('disabled', true);
+    }
+
+
+    function alertPassGenError(error) {
+        let msg = '';
+        if (error === PasswordGenerator.PASS_GEN_STATUS.PASS_LEN_TOO_SHORT)
+            msg = `The minimum password length is ${PasswordGenerator.DEFAULT_MIN_LEN}`;
+        else if (error === PasswordGenerator.PASS_GEN_STATUS.PASS_LEN_EXCEED)
+            msg = 'It is impossible to generate a password based on your current setting.';
+        alert(msg);
+    }
+
+
+    async function savePassword(passGen) {
+        var pwd = $('#passwordInput').val();
+        if (pwd === "") return;
+
+        let tabs = await browser.tabs.query({ currentWindow: true, active: true });
+        let domain = (new URL(tabs[0].url)).hostname;
+
+        let expiredDate = new Date();
+        expiredDate.setMonth(expiredDate.getMonth() + 3);
+
+        await passGen.exportPasswordHistoryToLocal(expiredDate, domain);
+    }
+
+    function generatePassword(passGen) {
+        const [msg, password] = passGen.generatePassword();
+        if (msg === PasswordGenerator.PASS_GEN_STATUS.SUCCESS) {
+            $('#passwordInput').val(password);
+        } else {
+            alertPassGenError(msg);
         }
     }
 
-    function init() {
+    async function init() {
+        let passGen = new PasswordGenerator();
+        await passGen.importOptionFromLocal();
+
         $('#cbGroup :input[type=checkbox]').click(function() {
             let disable = !isCheckboxChecked();
             $('#btnGenerate').attr('disabled', disable);
@@ -195,38 +114,21 @@ $(document).ready(function() {
             $('#excludeInput').attr('disabled', !this.checked);
         });
 
-        $('#excludeInput').attr('disabled', true);
-
-        $('#btnGenerate').click(function() {
-            $('#passwordInput').val(generatePassword());
-            storeOptions();
+        $('input:checkbox').change(function() {
+            setCurrentOptions(passGen);
         });
 
+        $('#excludeInput').on("input", () => setCurrentOptions(passGen));
+
+
+        $('#btnCopy').click(() => copyPassword(passGen));
         $('#btnHistory').click(viewHistory);
         $("#imgVisible").click(toggleImgVisible);
+        $('#btnRemind').click(() => savePassword(passGen));
+        $('#btnGenerate').click(() => generatePassword(passGen));
 
-        $('#btnCopy').click(function() {
-            var pwd = $('#passwordInput').val();
-            if (pwd !== "") {
-                $("#passwordInput").select();
-                document.execCommand("copy");
-                storePasswords(pwd);
-            }
-        });
-
-        $('#btnRemind').click(remindPassword);
-
-        for (const [cbID, enable] of Object.entries(DEFAULT_OPTIONS))
-            $(cbID).attr('checked', enable);
-
-        $('#passLenInput').val(DEFAULT_PASS_LEN);
-        $('#minPassLenLbl').text(DEFAULT_MIN_LEN);
-        $("#versionName").text(browser.runtime.getManifest().version);
-
-        browser.storage.local.get(Object.keys(DEFAULT_OPTIONS)).then((userOptions) => {
-            loadOptionsToForm(Object.assign({}, DEFAULT_OPTIONS, userOptions));
-            document.body.style = '';
-        });
+        loadCurrentOptions(passGen);
+        $('#passwordInput').val(passGen.generatePassword()[1]);
     }
 
     init();
