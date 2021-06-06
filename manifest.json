@@ -1,44 +1,42 @@
 {
-  "manifest_version": 2,
-  "name": "TL Password Generator",
-  "version": "1.0",
-  "description": "Generate the password",
+    "manifest_version": 2,
+    "name": "TL Password Generator",
+    "version": "1.0",
+    "description": "Generate the password",
 
-  "icons": {
-    "16": "images/password-16.png",
-    "32": "images/password-32.png",
-    "48": "images/password-48.png",
-    "64": "images/password-64.png"
-  },
-  "browser_action": {
-    "browser_style": true,
-    "default_icon": {
+    "icons": {
         "16": "images/password-16.png",
         "32": "images/password-32.png",
         "48": "images/password-48.png",
         "64": "images/password-64.png"
     },
-    "default_title": "TL Password Generator",
-    "default_popup": "popup.html"
+    "browser_action": {
+        "browser_style": true,
+        "default_icon": {
+            "16": "images/password-16.png",
+            "32": "images/password-32.png",
+            "48": "images/password-48.png",
+            "64": "images/password-64.png"
+        },
+        "default_title": "TL Password Generator",
+        "default_popup": "popup.html"
     },
-  "permissions": [
-    "storage",
-    "<all_urls>",
-    "clipboardWrite",
-    "notifications"
-  ],
-  "background": {
-    "scripts": [
-      "background.js"
+    "permissions": [
+        "storage",
+        "<all_urls>",
+        "clipboardWrite",
+        "notifications"
+    ],
+    "background": {
+        "page": "background.html"
+    },
+    "web_accessible_resources": [
+        "style.min.css",
+        "popup.html",
+        "history.html",
+        "password.js",
+        "history.js"
     ]
-  },
-  "web_accessible_resources": [
-    "style.min.css",
-    "popup.html",
-    "history.html",
-    "password.js",
-    "history.js"
-  ]
- 
+
 
 }
