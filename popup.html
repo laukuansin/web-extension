@@ -22,7 +22,7 @@
             <!--password length-->
             <div class="mb-4">
                 <label for="passLenInput" class="form-label">Password's length</label>
-                <input type="number" class="form-control" id="passLenInput" a describedby="passLenHelp">
+                <input type="number" class="form-control" min='6' id="passLenInput" a describedby="passLenHelp">
                 <div id="passLenHelp" class="form-text">Minimum: 6</div>
             </div>
 
@@ -110,7 +110,10 @@
             <button type="button" id='btnGenerate' class="btn btn-primary">Generate</button>
             <button type="button" id='btnHistory' class="btn btn-success mx-3">History</button>
             <button type="button" id='btnRemind' class="btn btn-warning ">Save Password</button>
+            
         </div>
+           
+
     </div>
     <script src="jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>

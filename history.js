@@ -23,7 +23,7 @@ $(document).ready(function() {
                 `
                 <tr>
                     <td><a href='${domain}'>${domain}</a></td>
-                    <td>${(new Date(expiredDate)).toUTCString()}</td>
+                    <td>${(new Date(expiredDate)).toLocaleString()}</td>
                 </tr> 
                 `
             );
@@ -37,7 +37,7 @@ $(document).ready(function() {
                 `
                 <tr>
                     <td>${pass.password}</td>
-                    <td>${(new Date(pass['date'])).toUTCString()}</td>
+                    <td>${(new Date(pass['date'])).toLocaleString()}</td>
                     <td>
                         <button class="btnCopy btn btn-link">Copy</button> 
                         <button class="btnRemove btn btn-link text-danger">Remove</button>

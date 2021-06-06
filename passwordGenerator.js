@@ -109,7 +109,7 @@ class PasswordGenerator {
         if (localStorage.TLPassGeneratorPass !== undefined)
             passList = JSON.parse(localStorage.TLPassGeneratorPass);
 
-        if (passList[passList.length - 1].password === pass)
+        if (passList.length > 0 && passList[passList.length - 1].password === pass)
             passList[passList.length - 1].date = new Date();
         else
             passList.push({
@@ -163,7 +163,7 @@ class PasswordGenerator {
         let res = [];
         let currDateTime = new Date();
         for (const [domain, expiredDate] of Object.entries(passHistory)) {
-            if (currDateTime > expiredDate) continue;
+            if (currDateTime < expiredDate) continue;
             res.push([domain, expiredDate]);
         }
 

@@ -89,12 +89,21 @@ $(document).ready(function() {
         expiredDate.setMonth(expiredDate.getMonth() + 3);
 
         await passGen.exportPasswordHistoryToLocal(expiredDate, domain);
+        document.querySelector('#btnRemind').innerHTML = 'Saved';
+        document.querySelector('#btnRemind').style.color = 'green';
+        document.querySelector('#btnRemind').disabled = true;
+
+
     }
 
     function generatePassword(passGen) {
         const [msg, password] = passGen.generatePassword();
         if (msg === PasswordGenerator.PASS_GEN_STATUS.SUCCESS) {
             $('#passwordInput').val(password);
+            document.querySelector('#btnRemind').innerHTML = 'Save Password';
+            document.querySelector('#btnRemind').style.color = 'black';
+            document.querySelector('#btnRemind').disabled = false;
+
         } else {
             alertPassGenError(msg);
         }
