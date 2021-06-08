@@ -1,4 +1,6 @@
-## ![img](https://github.com/laukuansin/web-extension/blob/main/images/password-32.png) TL Password Generator - Browser Extension
+# ![img](https://github.com/laukuansin/web-extension/blob/main/images/password-32.png) TL Password Generator(v1.0) - Browser Extension
+[![Software License](https://img.shields.io/github/license/laukuansin/web-extension)](LICENSE)
+
 TL Password Generator is a simple browser extension for generate a secure and complicated password with one click. The extension has provided diiferent options to generate the password and you can save the password and view the password history.
 ## Features
 - Generate password based on user's options:
