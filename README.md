@@ -35,13 +35,17 @@ TL Password Generator is a simple browser extension for generate a secure and co
 ## Installation
 Install the latest version from your web browser Add-ons web site.
 #### Firefox: <https://addons.mozilla.org/en-US/firefox/addon/tl-password-generator/>
+![img](https://github.com/laukuansin/web-extension/blob/main/images/screenshot4.png)
+
+![img](https://github.com/laukuansin/web-extension/blob/main/images/screenshot5.png)
+
 
 ## Screenshots
-![img](https://github.com/laukuansin/web-extension/blob/main/images/sceenshot1.png)
+![img](https://github.com/laukuansin/web-extension/blob/main/images/screenshot1.png)
 
-![img](https://github.com/laukuansin/web-extension/blob/main/images/sceenshot2.png)
+![img](https://github.com/laukuansin/web-extension/blob/main/images/screenshot2.png)
 
-![img](https://github.com/laukuansin/web-extension/blob/main/images/sceenshot3.png)
+![img](https://github.com/laukuansin/web-extension/blob/main/images/screenshot3.png)
 
 ## Note
 Privacy First - No trackers, No cookies
