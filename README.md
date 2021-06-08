@@ -2,7 +2,7 @@
 TL Password Generator is a simple browser extension for generate a secure and complicated password with one click. The extension has provided diiferent options to generate the password and you can save the password and view the password history.
 ## Features
 - Generate password based on user's options:
-	1. Numbers **( 0-9 )**
+    1. Numbers **( 0-9 )**
     2. Lowercase letter **( a-z )**
     3. Uppercase letter **( A-Z )**
     4. Symbols **( @#$%^&\*()+-=!_ )**
