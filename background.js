@@ -10,7 +10,9 @@ function checkPasswordDuration()
                 let current = new Date();
                 dueDate= new Date(result[key]['date']);
                 let leftDate=dueDate-current;
-                dueDate.setMonth(dueDate.getMonth()-3);
+                //dueDate.setMonth(dueDate.getMonth()-3);
+                dueDate.setMinutes(dueDate.getMinutes()-1);
+
                 if(leftDate<=0)
                 {
                     pwd=result[key]['password'];
